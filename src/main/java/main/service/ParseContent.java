@@ -42,6 +42,7 @@ public class ParseContent {
         ParseContext context = new ParseContext();
 
         parser.parse(stream, handler, metadata, context);
+       // System.out.println("Content-->>" + handler.toString());
         return handler.toString();
     }
 
@@ -80,6 +81,8 @@ public class ParseContent {
                             //parser.parse(inputStream, new BoilerpipeContentHandler(textHandler), xmetadata);
                             new HtmlParser().parse(inputStream,textHandler,xmetadata,new ParseContext());
                             document.setContent(textHandler.toString());
+                            document.setEntityName(EntityExtractionService.extractPersonName(textHandler.toString()));
+                            document.setEntityLocation(EntityExtractionService.extractLocationName(textHandler.toString()));
                            // document.setContent(value);
                             result = result + " " + textHandler.toString();
                         }

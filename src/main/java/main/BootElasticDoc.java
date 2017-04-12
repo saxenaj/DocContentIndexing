@@ -1,6 +1,7 @@
 package main;
 
 import main.model.Document;
+import main.service.EntityExtractionService;
 import main.service.ParseContent;
 import main.service.ParseService;
 import org.apache.commons.io.FilenameUtils;
@@ -71,7 +72,10 @@ public class BootElasticDoc implements CommandLineRunner {
                     Document document = new Document();
                     document.setName(resource.getFilename());
                     document.setDoclocation(resource.getURI().toString());
-                    document.setContent(new ParseContent().parseBodyContent(resource.getFile()));
+                    String content = new ParseContent().parseBodyContent(resource.getFile());
+                    document.setContent(content);
+                    document.setEntityName(EntityExtractionService.extractPersonName(content));
+                    document.setEntityLocation(EntityExtractionService.extractLocationName(content));
                     parseService.addDocument(document);
                 }
             }
@@ -92,7 +96,7 @@ public class BootElasticDoc implements CommandLineRunner {
         for(File file : pstFileList )
         {
             documentList = new ParseContent().parsePSTfile(file);
-            System.out.println("Document List size-->>" + documentList.size());
+            //System.out.println("Document List size-->>" + documentList.size());
         }
 
         for (Document document : documentList)

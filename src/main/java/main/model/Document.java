@@ -16,6 +16,8 @@ public class Document {
     private String name;
     private String doclocation;
     private String content;
+    private String entityName;
+    private String entityLocation;
     //private Long fileModified;
 
     public String getDoclocation() {
@@ -56,6 +58,22 @@ public class Document {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public String getEntityLocation() {
+        return entityLocation;
+    }
+
+    public void setEntityLocation(String entityLocation) {
+        this.entityLocation = entityLocation;
     }
 
     @Override

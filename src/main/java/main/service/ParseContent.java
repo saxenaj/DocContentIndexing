@@ -14,6 +14,7 @@ import org.apache.tika.parser.mbox.OutlookPSTParser;
 import org.apache.tika.sax.BasicContentHandlerFactory;
 import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.ToHTMLContentHandler;
+import org.springframework.stereotype.Service;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -29,6 +30,7 @@ import java.util.List;
 /**
  * Created by Jatin_Saxena on 4/4/2017.
  */
+@Service
 public class ParseContent {
     String content;
     String location;
@@ -42,7 +44,6 @@ public class ParseContent {
         ParseContext context = new ParseContext();
 
         parser.parse(stream, handler, metadata, context);
-       // System.out.println("Content-->>" + handler.toString());
         return handler.toString();
     }
 
@@ -90,6 +91,7 @@ public class ParseContent {
 
                 }
                 i++;
+                if(document.getName()!=null)
                 resultList.add(document);
             }
             j++;

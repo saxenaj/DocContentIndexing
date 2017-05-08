@@ -44,6 +44,9 @@ public class BootElasticDoc implements CommandLineRunner {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private ParseContent parseContent;
+
     private Resource[] resources ;
     private Map<String,Long> fileDetailsMap = new HashMap<String, Long>();
 
@@ -57,12 +60,17 @@ public class BootElasticDoc implements CommandLineRunner {
             resources = applicationContext.getResources(env.getProperty("spring.file.location"));
 
             for (Resource resource : resources) {
-                List<Document> docNameQuery = parseService.getByName(resource.getFilename());
-                if (!(docNameQuery.isEmpty()))
+              //  List<Document> docNameQuery = parseService.getByName(resource.getFilename());
+                //~$rdDocument.docx  getByDocLocation
+                String filename = resource.getFilename();
+               // List<Document> docNameQuery = parseService.getByName("\""+filename+"\"");
+
+                Iterable<Document> iterable = parseService.getByDocLocation("\""+filename+"\"");
+                Iterator<Document> it = iterable.iterator();
+                while (it.hasNext())
                 {
-                    Iterator<Document> iterator = docNameQuery.iterator();
-                    while (iterator.hasNext())
-                        parseService.deleteDocument(iterator.next());
+                    Document doc = it.next();
+                    parseService.deleteDocument(doc);
                 }
 
                 String ext = FilenameUtils.getExtension(resource.getFile().getAbsolutePath());
@@ -71,8 +79,11 @@ public class BootElasticDoc implements CommandLineRunner {
                 else {
                     Document document = new Document();
                     document.setName(resource.getFilename());
-                    document.setDoclocation(resource.getURI().toString());
-                    String content = new ParseContent().parseBodyContent(resource.getFile());
+                   // document.setDoclocation(resource.getURI().toString());
+                    document.setDoclocation(resource.getFile().getAbsolutePath());
+                   // String content = new ParseContent().parseBodyContent(resource.getFile());
+                    String content = parseContent.parseBodyContent(resource.getFile());
+
                     document.setContent(content);
                     document.setEntityName(EntityExtractionService.extractPersonName(content));
                     document.setEntityLocation(EntityExtractionService.extractLocationName(content));
@@ -95,8 +106,8 @@ public class BootElasticDoc implements CommandLineRunner {
 
         for(File file : pstFileList )
         {
-            documentList = new ParseContent().parsePSTfile(file);
-            //System.out.println("Document List size-->>" + documentList.size());
+            //documentList = new ParseContent().parsePSTfile(file);
+            documentList = parseContent.parsePSTfile(file);
         }
 
         for (Document document : documentList)
@@ -107,18 +118,7 @@ public class BootElasticDoc implements CommandLineRunner {
 
 
     public void run(String... args) throws Exception {
-
         addDocuments();
-
-     /*  List<Document> docNameQuery = parseService.getByName("Jatin.txt");
-         Iterator<Document> iterator = docNameQuery.iterator();
-        while(iterator.hasNext())
-        {
-            Document doc = iterator.next();
-            fileDetailsMap.put(doc.getName(),doc.getFileModified());
-        }*/
-        //fileTobeAdded();
-       //logger.info("Content of test.docx name query is {}", docNameQuery);
     }
 
     public static void main(String[] args) throws Exception {

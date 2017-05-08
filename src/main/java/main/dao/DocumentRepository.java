@@ -1,6 +1,7 @@
 package main.dao;
 
 import main.model.Document;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;
@@ -11,4 +12,5 @@ import java.util.List;
 public interface DocumentRepository extends ElasticsearchRepository<Document, Long> {
 
     public List<Document> findByName(String docname);
+    public List<Document> findBydoclocation(String location);
 }

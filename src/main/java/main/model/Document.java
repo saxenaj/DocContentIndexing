@@ -18,7 +18,6 @@ public class Document {
     private String content;
     private String entityName;
     private String entityLocation;
-    //private Long fileModified;
 
     public String getDoclocation() {
         return doclocation;
@@ -43,14 +42,6 @@ public class Document {
     public void setName(String name) {
         this.name = name;
     }
-
-    /*public Long getFileModified() {
-        return fileModified;
-    }
-
-    public void setFileModified(Long fileModified) {
-        this.fileModified = fileModified;
-    }*/
 
     public String getId() {
         return id;
